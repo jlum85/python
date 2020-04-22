@@ -2,72 +2,92 @@
 import random
 import json
 
-# quotes = [
-#     "Ecoutez-moi, Monsieur Shakespeare, nous avons beau être ou ne pas être, nous sommes !",
-#     "On doit pouvoir choisir entre s'écouter parler et se faire entendre.",
-#     "Autre citation.",
-#     "Open classroom tuto "
-# ]
-
-# characters = [
-#     "alvin et les Chipmunks",
-#     "Babar",
-#     "betty boop",
-#     "calimero",
-#     "casper",
-#     "le chat potté",
-#     "Kirikou"]
+# Give a Json file and return a List
 
 
-def read_value_from_json(file, key):
+def read_values_from_json(path, key):
     values = []
-    with open(file) as f:
+    with open(path) as f:
         data = json.load(f)
         for entry in data:
             values.append(entry[key])
         return values
 
+# Give a json and return a list
 
-def get_random_item(my_list):
-    rand_numb = random.randint(0, len(my_list)-1)
-    item = my_list[rand_numb]
-    return item
+
+def clean_strings(sentences):
+    cleaned = []
+    # Store quotes on a list. Create an empty list and add each sentence one by one.
+    for sentence in sentences:
+        # Clean quotes from whitespace and so on
+        clean_sentence = sentence.strip()
+        # don't use extend as it adds each letter one by one!
+        cleaned.append(clean_sentence)
+    return cleaned
+
+
+# Return a random item in a list
+
+
+def random_item_in(object_list):
+    rand_numb = random.randint(0, len(object_list) - 1)
+    return object_list[rand_numb]
+
+
+# Return a random value from a json file
+
+
+def random_value(source_path, key):
+    all_values = read_values_from_json(source_path, key)
+    clean_values = clean_strings(all_values)
+    return random_item_in(clean_values)
+
+
+#####################
+###### QUOTES #######
+#####################
+
+# Gather quotes from San Antonio
+
+def random_quote():
+    return random_value('quotes.json', 'quote')
+
+######################
+#### CHARACTERS ######
+######################
+
+# Gather characters from Wikipedia
 
 
 def random_character():
-    all_value = read_value_from_json("characters.json", "character")
-    return get_random_item(all_value)
+    return random_value('characters.json', 'character')
 
 
-def random_quote():
-    all_value = read_value_from_json("quote.json", "quote")
-    return get_random_item(all_value)
+######################
+#### INTERACTION ######
+######################
 
+# Print a random sentence.
 
-def capitalize(words):
-    for word in words:
-        word.capitalize()
-
-
-def message(character, quote):
-    capitalize(character)
-    capitalize(quote)
-    return "{}  a dit : {}".format(character, quote)
-
-
-user_answer = input(
-    'Tapez entrée pour découvrir une autre citation ou B pour quitter le programme.')
-
-
-while user_answer != "B":
-    print(message(random_character(), random_quote()))
+def print_random_sentence():
+    rand_quote = random_quote()
+    rand_character = random_character()
+    print(">>>> {} a dit : {}".format(rand_character, rand_quote))
     print("  ")
-    user_answer = input(
-        'Tapez entrée pour découvrir une autre citation ou B pour quitter le programme.')
 
 
-# for item in characters:
-#     n_character = item.capitalize()
-#     print(n_character)
+def main_loop():
+    while True:
+        print_random_sentence()
+        message = ('Voulez-vous voir une autre citation ?'
+                   'Pour sortir du programme, tapez [B].')
+        choice = input(message).upper()
+        if choice == 'B':
+            break
+            # This will stop the loop!
 
-# print(show_random_quote(quotes))
+
+# Cela permet juste de se servir d'un module en tant que script sans avoir à l'importer dans la console.
+if __name__ == '__main__':
+    main_loop()
