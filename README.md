@@ -2,6 +2,10 @@
 
 ## scrapy
 
+Démarrez votre projet avec Python
+
+https://openclassrooms.com/fr/courses/4262331-demarrez-votre-projet-avec-python
+
 ### Installation
 
 https://scrapy.org/
